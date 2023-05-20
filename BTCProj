@@ -1,32 +1,5 @@
-select *
-from btc_history;
+--Changed data types
 
--- What is the highest Bitcoin price recorded in the dataset?
-
-SELECT MAX(CAST(High AS DECIMAL(10, 2))) AS Highest_Price FROM btc_history;
-
---What is the lowest Bitcoin price recorded in the dataset?
-
-SELECT MIN (CAST(Low AS DECIMAL(10, 2))) AS Lowest_Price FROM btc_history;
-
---How many records are there in the dataset?
-
-SELECT COUNT(*) AS Total_Records FROM btc_history;
-
---What is the average closing price of Bitcoin?
-
-SELECT AVG(CAST(daily_close AS DECIMAL(10, 2))) FROM btc_history;
-
---What is the total volume of Bitcoin traded?
-
-SELECT SUM(CAST(volume AS bigint) FROM btc_history;
-
---What is the highest trading volume recorded in a single day?
-
-SELECT MAX(CAST(daily_close AS DECIMAL(10, 2))) FROM btc_history;
-		   
--- Alter the column to use the data type
--- Alter the column to use the date data type, specifying the conversion
 ALTER TABLE btc_history ALTER COLUMN daily_date TYPE date USING daily_date::date;
 ALTER TABLE btc_history ALTER COLUMN daily_open TYPE DECIMAL(10, 2) USING daily_open::numeric(10, 2);
 ALTER TABLE btc_history ALTER COLUMN high TYPE DECIMAL(10, 2) USING high::numeric(10, 2);
@@ -34,6 +7,56 @@ ALTER TABLE btc_history ALTER COLUMN low TYPE DECIMAL(10, 2) USING low::numeric(
 ALTER TABLE btc_history ALTER COLUMN daily_close TYPE DECIMAL(10, 2) USING daily_close::numeric(10, 2);
 ALTER TABLE btc_history ALTER COLUMN adj_close TYPE DECIMAL(10, 2) USING adj_close::numeric(10, 2);
 ALTER TABLE btc_history ALTER COLUMN volume TYPE BIGINT USING volume::bigint;
+
+
+SELECT *
+FROM btc_history;
+
+--What is the highest Bitcoin price recorded in the dataset?
+
+SELECT MAX(high), daily_date
+FROM btc_history
+GROUP BY daily_date
+ORDER BY MAX(high) DESC
+LIMIT 1;
+
+--What is the lowest Bitcoin price recorded in the dataset?
+
+SELECT MIN(low), daily_date
+FROM btc_history
+GROUP BY daily_date
+ORDER BY MIN(low) ASC
+LIMIT 1;
+
+
+--How many records are there in the dataset?
+
+SELECT COUNT(*)
+FROM btc_history;
+
+--What is the average closing price of Bitcoin?
+
+SELECT AVG(daily_close)
+FROM btc_history;
+
+--What is the total volume of Bitcoin traded?
+
+SELECT SUM(volume)
+FROM btc_history;
+
+--What is the highest trading volume recorded in a single day?
+
+SELECT MAX(volume), daily_date 
+FROM btc_history
+GROUP BY daily_date
+ORDER BY MAX(volume) DESC
+LIMIT 1;
+
+-- What is the average daily price range (difference between high and low)?
+
+SELECT AVG(high - low) AS avg_daily_range
+FROM btc_history;
+
 
 
 
